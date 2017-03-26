@@ -21,30 +21,28 @@ function loadProgressHandler(loader, resource) {
     console.log("progress: " + loader.progress + "%");
 }
 
-var state, kirby, box;
+var state, kirby, env;
+var platforms = [];
 
 function setup() {
     console.log("setting up");
-
-    // create platform
-    box = new PIXI.Graphics();
-    box.beginFill(0x7B4A12);
-    box.drawRect(0, 0, 50, 8);
-    box.position.set(64, 150);
-    box.endFill();
-
-    stage.addChild(box);
 
     // create sprite
     kirby = new PIXI.Sprite(
         PIXI.loader.resources["img/kirby-hd.png"].texture
     );
     kirby.scale.set(0.05, 0.05);
-    kirby.position.set(64, 64);
+    kirby.position.set(64, 28);
     kirby.vx = 0;
     kirby.vy = 0;
 
-    stage.addChild(kirby);
+    // stage.addChild(kirby);
+
+    env = new PIXI.Container();
+    env.addChild(kirby);
+    env.vx = -0.5;
+
+    stage.addChild(env);
 
     // capture keyboard arrow keys
     var left = keyboard(37),
@@ -107,14 +105,49 @@ function gameLoop() {
 
 // handles gameplay
 function play() {
+    genPlatforms();
+
     kirby.x += kirby.vx;
     kirby.y += kirby.vy;
 
+    env.x += env.vx;
+
     gravity();
 
-    if (detectCollision(kirby, box)) {
-        console.log("collision");
-        kirby.vy = 0;
+    console.log("platforms: " + platforms);
+    for (platform in platforms) {
+        if (detectCollision(kirby, platform)) {
+            kirby.vy = 0;
+        }
+    }
+
+}
+
+function genPlatforms() {
+    var numPlatforms = Math.ceil(Math.random() * 2);
+
+    var pos1 = Math.random() * 128;
+
+    var box1 = new PIXI.Graphics();
+    box1.beginFill(0x7B4A12);
+    box1.drawRect(0, 0, 50, 8);
+    box1.position.set(256, pos1);
+    box1.endFill();
+
+    platforms.push(box1);
+    env.addChild(box1);
+
+    if (numPlatforms === 2) {
+        var pos1 = Math.random() * 128 + 128;
+
+        var box2 = new PIXI.Graphics();
+        box2.beginFill(0x7B4A12);
+        box2.drawRect(0, 0, 50, 8);
+        box2.position.set(256, pos2);
+        box2.endFill();
+
+        platforms.push(box2);
+        env.addChild(box2);
     }
 }
 
@@ -134,9 +167,6 @@ function detectCollision(r1, r2) {
     r1.centerY = r1.y + r1.height / 2; 
     r2.centerX = r2.x + r2.width / 2; 
     r2.centerY = r2.y + r2.height / 2;
-
-    // console.log(r1.centerY);
-    console.log(r2.y);
 
     //Find the half-widths and half-heights of each sprite
     r1.halfWidth = r1.width / 2;
