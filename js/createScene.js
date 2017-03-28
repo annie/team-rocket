@@ -1,3 +1,5 @@
+
+
 // set up renderer
 var renderer = PIXI.autoDetectRenderer(256, 256, {
     antialias: false, 
@@ -5,92 +7,109 @@ var renderer = PIXI.autoDetectRenderer(256, 256, {
     resolution: 2
 });
 renderer.backgroundColor = 0x62A8E5;
-// add to DOM
 document.body.appendChild(renderer.view);
 
 // set up stage
-var stage = new PIXI.Container();
-// convert image to texture
-PIXI.loader
-    .add("img/kirby-hd.png")
-    .on("progress", loadProgressHandler)
-    .load(setup);
 
 function loadProgressHandler(loader, resource) {
     console.log("loading: " + resource.url);
     console.log("progress: " + loader.progress + "%");
 }
 
+// convert image to texture
+PIXI.loader
+    .add("img/kirby-hd.png")
+    .add("img/platform.png")
+    .on("progress", loadProgressHandler)
+    .load(setup);
+
+// scene for containing objects
+var scene;
 var state, kirby, env;
-var platforms = [];
+var player_entity;
+
+
+function generate_entities()
+{
+	scene = new Scene();
+
+	// player: create sprite
+	kirby = new PIXI.Sprite( PIXI.loader.resources["img/kirby-hd.png"].texture);
+	var actual_kirby_size_x = 747;
+	var actual_kirby_size_y = 795;
+	var kirby_scale = 0.03;
+	kirby.scale.set(kirby_scale, kirby_scale);
+	kirby.position.set(64, 0);
+	kirby.vx = 0;
+	kirby.vy = 0;
+	player_entity = new Player(new Rect(64, 0, 
+		actual_kirby_size_x*kirby_scale, 
+		actual_kirby_size_y*kirby_scale), kirby, 'player');
+
+	var platform_sprite = new PIXI.Sprite( PIXI.loader.resources["img/platform.png"].texture);
+	platform_sprite.scale.set(8, 0.2);
+	platform_sprite.vx = platform_sprite.vy = 0;
+	var platform = new Platform(new Rect(0, 100, 400, 10), platform_sprite, 'plat');
+
+	var platform_sprite2 = new PIXI.Sprite( PIXI.loader.resources["img/platform.png"].texture);
+	platform_sprite2.scale.set(8, 0.2);
+	platform_sprite2.vx = platform_sprite.vy = 0;
+	var platform2 = new Platform(new Rect(130, 60, 400, 10), platform_sprite2, 'plat');
+
+
+	// add entities to scene
+	scene.add_entity(player_entity);
+	scene.add_entity(platform);
+	scene.add_entity(platform2);
+
+	//env = new PIXI.Container();
+	//env.addChild(kirby);
+	//env.vx = -0.5;
+
+}
 
 function setup() {
-    console.log("setting up");
+	generate_entities();
+	console.log("setting up");
 
-    // create sprite
-    kirby = new PIXI.Sprite(
-        PIXI.loader.resources["img/kirby-hd.png"].texture
-    );
-    kirby.scale.set(0.05, 0.05);
-    kirby.position.set(64, 28);
-    kirby.vx = 0;
-    kirby.vy = 0;
+	// capture keyboard arrow keys
+	var left = keyboard(37),
+	    up = keyboard(38),
+	    right = keyboard(39),
+	    down = keyboard(40);
 
-    // stage.addChild(kirby);
+	// set up keyboard functions
+	left.press = function() { player_entity.left_press(); }
+	left.release = function() { 
+		if (!right.isDown) {
+			player_entity.left_release(); 
+		}
+	}
 
-    env = new PIXI.Container();
-    env.addChild(kirby);
-    env.vx = -0.5;
+	right.press = function() { player_entity.right_press(); }
+	right.release = function() {
+		if (!left.isDown) {
+			player_entity.right_release();
+		}
+	}
 
-    stage.addChild(env);
+	up.press = function() {
+		player_entity.up_press();
+	}
+	up.release = function() {
+		if (!down.isDown) { }
+	}
 
-    // capture keyboard arrow keys
-    var left = keyboard(37),
-        up = keyboard(38),
-        right = keyboard(39),
-        down = keyboard(40);
+	down.press = function() {
+	}
+	down.release = function() {
+		if (!up.isDown) {
+		}
+	}
 
-    // set up keyboard functions
-    left.press = function() {
-        kirby.vx = -0.5;
-    }
-    left.release = function() {
-        if (!right.isDown) {
-            kirby.vx = 0;
-        }
-    }
-
-    right.press = function() {
-        kirby.vx = 0.5;
-    }
-    right.release = function() {
-        if (!left.isDown) {
-            kirby.vx = 0;
-        }
-    }
-
-    up.press = function() {
-        kirby.vy = -0.5;
-    }
-    up.release = function() {
-        if (!down.isDown) {
-            kirby.vy = 0;
-        }
-    }
-
-    down.press = function() {
-        kirby.vy = 0.5;
-    }
-    down.release = function() {
-        if (!up.isDown) {
-            kirby.vy = 0;
-        }
-    }
-
-    // set game state
-    state = play;
-
-    gameLoop();
+	// set game state
+	state = play;
+	gameLoop();
 }
 
 // continually updates the game
@@ -100,110 +119,24 @@ function gameLoop() {
 
     state();
 
-    renderer.render(stage);
+    scene.render_all(renderer);	
 }
 
 // handles gameplay
 function play() {
-    genPlatforms();
+    //genPlatforms();
 
+    scene.update_all();
     kirby.x += kirby.vx;
     kirby.y += kirby.vy;
 
-    env.x += env.vx;
-
-    gravity();
-
-    console.log("platforms: " + platforms);
-    for (platform in platforms) {
-        if (detectCollision(kirby, platform)) {
-            kirby.vy = 0;
-        }
-    }
-
-}
-
-function genPlatforms() {
-    var numPlatforms = Math.ceil(Math.random() * 2);
-
-    var pos1 = Math.random() * 128;
-
-    var box1 = new PIXI.Graphics();
-    box1.beginFill(0x7B4A12);
-    box1.drawRect(0, 0, 50, 8);
-    box1.position.set(256, pos1);
-    box1.endFill();
-
-    platforms.push(box1);
-    env.addChild(box1);
-
-    if (numPlatforms === 2) {
-        var pos1 = Math.random() * 128 + 128;
-
-        var box2 = new PIXI.Graphics();
-        box2.beginFill(0x7B4A12);
-        box2.drawRect(0, 0, 50, 8);
-        box2.position.set(256, pos2);
-        box2.endFill();
-
-        platforms.push(box2);
-        env.addChild(box2);
-    }
+    //env.x += env.vx;
+    //gravity();
 }
 
 function gravity() {
-    kirby.vy += 0.03;
+    //kirby.vy += 0.03;
 }
-
-function detectCollision(r1, r2) {
-    //Define the variables we'll need to calculate
-    var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
-
-    //hit will determine whether there's a collision
-    hit = false;
-
-    //Find the center points of each sprite
-    r1.centerX = r1.x + r1.width / 2;
-    r1.centerY = r1.y + r1.height / 2; 
-    r2.centerX = r2.x + r2.width / 2; 
-    r2.centerY = r2.y + r2.height / 2;
-
-    //Find the half-widths and half-heights of each sprite
-    r1.halfWidth = r1.width / 2;
-    r1.halfHeight = r1.height / 2;
-    r2.halfWidth = r2.width / 2;
-    r2.halfHeight = r2.height / 2;
-
-    //Calculate the distance vector between the sprites
-    vx = r1.centerX - r2.centerX;
-    vy = r1.centerY - r2.centerY;
-
-    //Figure out the combined half-widths and half-heights
-    combinedHalfWidths = r1.halfWidth + r2.halfWidth;
-    combinedHalfHeights = r1.halfHeight + r2.halfHeight;
-
-    //Check for a collision on the x axis
-    if (Math.abs(vx) < combinedHalfWidths) {
-
-        //A collision might be occuring. Check for a collision on the y axis
-        if (Math.abs(vy) < combinedHalfHeights) {
-
-          //There's definitely a collision happening
-          hit = true;
-        } else {
-
-          //There's no collision on the y axis
-          hit = false;
-        }
-    } else {
-
-        //There's no collision on the x axis
-        hit = false;
-    }
-
-    //`hit` will be either `true` or `false`
-    return hit;
-};
 
 // keyboard input helper
 function keyboard(keyCode) {
