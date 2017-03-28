@@ -1,11 +1,13 @@
 
-
 // set up renderer
-var renderer = PIXI.autoDetectRenderer(256, 256, {
-    antialias: false, 
-    transparent: false, 
-    resolution: 2
-});
+var renderer = PIXI.autoDetectRenderer(
+	window.innerWidth, window.innerHeight,
+	{
+	antialias: false, 
+	transparent: false, 
+	resolution: 2
+	}
+);
 renderer.backgroundColor = 0x62A8E5;
 document.body.appendChild(renderer.view);
 
