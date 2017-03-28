@@ -84,6 +84,7 @@ class Player extends Entity
 	constructor(rect, sprite, id) {
 		super(rect, sprite, id);
 		this.can_jump = true;
+		this.move_amount = 200;
 	}
 
 	update(dt, scene) {
@@ -99,15 +100,15 @@ class Player extends Entity
 		}
 	}
 
-	left_press() { this.vx = -40; }
+	left_press() { this.vx = -this.move_amount; }
 	left_release() { this.vx = 0; }
-	right_press() { this.vx = 40; }
+	right_press() { this.vx = this.move_amount; }
 	right_release() { this.vx = 0; }
 	up_press() { 
 		// If we have hit the ground recently, then
 		if (this.can_jump) 
 		{
-			this.vy = -120; 
+			this.vy = -this.move_amount*5; 
 			this.can_jump = false;
 		}
 	}
@@ -128,75 +129,4 @@ class Platform extends Entity
 	}
 
 }
-
-
-class Scene
-{
-	constructor() {
-		this.entities = [];
-	}
-
-	add_entity(new_entity)
-	{
-		this.entities.push(new_entity); 
-	}
-
-	does_rect_collide(newRect, checker)
-	{
-		var collides = false;
-		for (var i = 0; i < scene.entities.length; ++i) {
-			var entity = scene.entities[i];
-			if (entity === checker) continue;
-			if (entity.collision_box.collides(newRect)) { 
-				collides = true;
-				break;
-			}
-		}
-		return collides;
-
-
-	}
-
-	render_all(renderer) {
-
-		var stage = new PIXI.Container();
-
-		// render entities
-		for (var i = 0; i < this.entities.length; ++i) {
-			var entity = this.entities[i];
-			// update sprite's position based on boundaries:
-			entity.sprite.position.set(entity.collision_box.x, 
-				entity.collision_box.y);
-
-			//console.log(entity.id + ": ");
-			//console.log(entity.collision_box.x);
-			//console.log(entity.collision_box.y);
-			stage.addChild(entity.sprite);
-		}
-		renderer.render(stage);
-	}
-
-	update_all() {
-		var seconds = 1.000/60;
-
-		// gravity - all non-fixed entities, go.
-		for (var i = 0; i < this.entities.length; ++i) {
-			var entity = this.entities[i];
-			if (!entity.is_fixed)
-				entity.vy += 2;
-		}
-	
-
-		// propagate updates to the entities
-		for (var i = 0; i < this.entities.length; ++i) {
-			var entity = this.entities[i];
-			entity.update(seconds, this);
-		}
-
-	}
-
-}
-
-
-
 

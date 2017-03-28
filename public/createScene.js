@@ -18,6 +18,9 @@ function loadProgressHandler(loader, resource) {
     console.log("progress: " + loader.progress + "%");
 }
 
+
+// //////////////////////////////////////////////////
+// aaaaaahhhhhhh note:
 // convert image to texture
 PIXI.loader
     .add("img/kirby-hd.png")
@@ -33,13 +36,12 @@ var player_entity;
 
 function generate_entities()
 {
-	scene = new Scene();
-
+	
 	// player: create sprite
 	kirby = new PIXI.Sprite( PIXI.loader.resources["img/kirby-hd.png"].texture);
 	var actual_kirby_size_x = 747;
 	var actual_kirby_size_y = 795;
-	var kirby_scale = 0.03;
+	var kirby_scale = 0.1;
 	kirby.scale.set(kirby_scale, kirby_scale);
 	kirby.position.set(64, 0);
 	kirby.vx = 0;
@@ -49,17 +51,19 @@ function generate_entities()
 		actual_kirby_size_y*kirby_scale), kirby, 'player');
 
 	var platform_sprite = new PIXI.Sprite( PIXI.loader.resources["img/platform.png"].texture);
-	platform_sprite.scale.set(8, 0.2);
+	platform_sprite.scale.set(40, 2);
 	platform_sprite.vx = platform_sprite.vy = 0;
-	var platform = new Platform(new Rect(0, 100, 400, 10), platform_sprite, 'plat');
+	var platform = new Platform(new Rect(0, 700, 2000, 100), platform_sprite, 'plat');
 
 	var platform_sprite2 = new PIXI.Sprite( PIXI.loader.resources["img/platform.png"].texture);
-	platform_sprite2.scale.set(8, 0.2);
+	platform_sprite2.scale.set(40, 2);
 	platform_sprite2.vx = platform_sprite.vy = 0;
-	var platform2 = new Platform(new Rect(130, 60, 400, 10), platform_sprite2, 'plat');
+	var platform2 = new Platform(new Rect(400, 300, 2000, 100), platform_sprite2, 'plat');
 
 
 	// add entities to scene
+	// pass scene the window's width and height, basically our viewport dims
+	scene = new Scene(window.innerWidth, window.innerHeight, player_entity);
 	scene.add_entity(player_entity);
 	scene.add_entity(platform);
 	scene.add_entity(platform2);
