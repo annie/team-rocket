@@ -42,6 +42,10 @@ class Scene
 		// in a container and render em all at once
 		var stage = new PIXI.Container();
 
+        var bg_texture = PIXI.Texture.fromImage("img/city-bg.jpg");
+        var tiling_bg = new PIXI.extras.TilingSprite(bg_texture, renderer.width, renderer.height);
+        stage.addChild(tiling_bg);
+
 		var box = this.target_entity.collision_box;
 		var ref_pos_x = box.x; 
 		var ref_pos_y = box.y; 

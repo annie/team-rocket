@@ -21,7 +21,9 @@
     "three": "^0.84.0"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "mongodb": "^2.2.25"
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.2"
   }
 }

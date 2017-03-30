@@ -8,7 +8,7 @@ var renderer = PIXI.autoDetectRenderer(
 	resolution: 2
 	}
 );
-renderer.backgroundColor = 0x62A8E5;
+// renderer.backgroundColor = 0x62A8E5;
 document.body.appendChild(renderer.view);
 
 // set up stage
@@ -130,14 +130,18 @@ function gameLoop() {
 
 // handles gameplay
 function play() {
-    //genPlatforms();
-
     scene.update_all();
-    kirby.x += kirby.vx;
-    kirby.y += kirby.vy;
 
-    //env.x += env.vx;
-    //gravity();
+    if (player_entity.collision_box.y > 1000) {
+        var score = {
+            userId: "Annie",
+            val: player_entity.collision_box.x
+        }
+        var req = new XMLHttpRequest();
+        req.open("POST", "http://localhost:8080/", true);
+        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        req.send(JSON.stringify(score));
+    }
 }
 
 function gravity() {
