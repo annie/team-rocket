@@ -24,8 +24,11 @@ class Entity
 		this.id = id;
 		this.vx = 0.0;
 		this.vy = 0.0;
+		this.is_flipped = false;
 
-		// flags
+		// state flags
+		this.is_passable = false;
+		this.is_alive = true;
 		this.last_tick_immobilized_x = false;
 		this.last_tick_immobilized_y = false;
 
@@ -74,7 +77,18 @@ class Entity
 					this.collision_box.y + dt*this.vy,
 					this.collision_box.width,
 					this.collision_box.height);
-		}
+
+			// Which direction is the entity facing? 
+			var abs_scale = Math.abs(this.sprite.scale.x);
+			if (this.vx != 0)
+			{
+				var dir = this.vx > 0 ? 1 : -1;
+				this.is_flipped = this.vx > 0 ? false : true;
+				this.sprite.scale.set(abs_scale * dir, abs_scale);
+			}
+			
+		} // non-fixed
+
 	}
 
 }
@@ -115,6 +129,34 @@ class Player extends Entity
 	
 
 }
+
+
+
+class Item extends Entity
+{
+	constructor(rect, sprite, id) {
+		super(rect, sprite, id);
+		this.is_fixed = true;
+		this.is_passable = true;
+	}
+
+	update(dt, scene) {
+		// moves based off the velocity
+		super.update(dt, scene);
+
+		// Are we colliding with the player at any point?
+		if (this.collision_box.collides(scene.player.collision_box)) {
+
+			// How much is this item worth?
+			scene.add_score(40);
+
+			// Remove this item
+			this.is_alive = false;
+		}
+	}
+}
+
+
 
 class Platform extends Entity
 {

@@ -25,6 +25,7 @@ function loadProgressHandler(loader, resource) {
 PIXI.loader
     .add("img/kirby-hd.png")
     .add("img/platform.png")
+    .add("img/coin.png")
     .on("progress", loadProgressHandler)
     .load(setup);
 
@@ -60,13 +61,18 @@ function generate_entities()
 	platform_sprite2.vx = platform_sprite.vy = 0;
 	var platform2 = new Platform(new Rect(400, 300, 2000, 100), platform_sprite2, 'plat');
 
+	var coin = new PIXI.Sprite( PIXI.loader.resources["img/coin.png"].texture);
+	coin.scale.set(1, 1);
+	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin');
+
 
 	// add entities to scene
 	// pass scene the window's width and height, basically our viewport dims
-	scene = new Scene(window.innerWidth, window.innerHeight, player_entity);
+	scene = new Scene(window.innerWidth, window.innerHeight, player_entity, player_entity);
 	scene.add_entity(player_entity);
 	scene.add_entity(platform);
 	scene.add_entity(platform2);
+	scene.add_entity(coin_entity);
 
 	//env = new PIXI.Container();
 	//env.addChild(kirby);
