@@ -5,21 +5,8 @@ var User = require("./models/User");
 module.exports = function(app) {
 
     app.get("/", function (req, res) {
-
-        var newUser = new User({
-            userId: "23875840",
-            highScore: 0
-        });
-
-        newUser.save(function (err, newUser, numAffected) {
-            if (err) {
-                console.log("there was an error");
-            }
-            console.log("newUser: " + newUser.userId);
-            console.log("numAffected: " + numAffected);
-        });
-
-        res.sendFile(path.join(__dirname, "../public", "kirby.html"));
+        res.sendFile(path.join(__dirname, "../public", "login.html"));
+        // console.log("hello");
     });
 
     app.post("/", function (req, res) {
@@ -27,7 +14,22 @@ module.exports = function(app) {
             userId: req.body.userId,
             val: req.body.val
         }
-        console.log("score: " + score.val);
+        // console.log("score: " + score.val);
+        // console.log("user: " + score.userId);
+    });
+
+    app.get("/signup", function (req, res) {
+        res.sendFile(path.join(__dirname, "../public", "signup.html"))
+    });
+
+    app.post("/signup", function (req, res) {
+        console.log(req.body.userId);
+        var user = {
+            userId: req.body.userId,
+            score: req.body.score
+        }
+        // console.log("User: " + user.userId + " Score: " + user.score);
+        // console.log("Score: " + user.score);
     });
 
     app.listen(3000, function() {

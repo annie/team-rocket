@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      
+
+    <title>Node.js Login</title>
+    <link rel="stylesheet" href="/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body>
+  <a href="http://jquery.com/">jQuery</a>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="signup.js"></script>    
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <div class="navbar-brand">Node Login</div>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <div class="navbar-btn"><a href="https://github.com/braitsch/node-login#readme" class="btn btn-default">Documentation</a></div>
+          </li>
+          <li>
+            <div class="navbar-btn"><a href="https://github.com/braitsch/node-login" class="btn btn-default">Source</a></div>
+          </li>
+          <li>
+            <div id="btn-donate" class="navbar-btn btn btn-default">Donate</div>
+          </li>
+          <li>
+            <div class="navbar-btn"><a href="http://braitsch.io" class="btn btn-default">&copy; braitsch</a></div>
+          </li>
+          <li>
+            <div id="btn-logout" class="navbar-btn btn btn-primary hide">Sign Out</div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- preset form values if we receive a userdata object //-->
+    <!-- store the userId on the client side in a hidden input field //-->
+    <input type="hidden" id="userId">
+    <div id="account-form-container" class="center-vertical">
+      <form method="post" id="account-form" class="form-horizontal well">
+        <h2></h2>
+        <h6 id="sub1">Please tell us a little about yourself.</h6>
+        <hr>
+        <div class="form-group">
+          <label class="control-label col-sm-3">Name</label>
+          <div class="col-sm-9">
+            <input id="name-tf" type="text" name="name" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3">Email</label>
+          <div class="col-sm-9">
+            <input id="email-tf" type="text" name="email" class="form-control">
+          </div>
+        </div>
+        
+        <hr>
+        <h6 id="sub2"></h6>
+        <div class="form-group">
+          <label class="control-label col-sm-3">Username</label>
+          <div class="col-sm-9">
+            <input id="user-tf" type="text" name="user" class="form-control disabled">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label col-sm-3">Password</label>
+          <div class="col-sm-9">
+            <input id="pass-tf" type="password" name="pass" value="" class="form-control">
+          </div>
+        </div>
+        <hr>
+        <div class="form-buttons">
+          <button type="button" id="account-form-btn1" class="btn btn-default"></button>
+          <button type="submit" id="account-form-btn2" class="btn btn-primary"></button>
+        </div>
+        <div class="clearfix"></div>
+      </form>
+    </div>
+
+  
+  </body>
+</html>
