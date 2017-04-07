@@ -141,7 +141,7 @@ function play() {
     if (player_entity.collision_box.y > 1000) {
         var score = {
             userId: "Annie",
-            val: player_entity.collision_box.x
+            highScore: player_entity.collision_box.x
         }
         var req = new XMLHttpRequest();
         req.open("POST", "http://localhost:8080/", true);
