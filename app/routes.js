@@ -24,10 +24,10 @@ module.exports = function(app) {
     });
 
     app.post("/game", function (req, res) {
-        var score = {
-            userId: req.body.userId,
-            val: req.body.val
-        }
+        // var score = {
+        //     userId: req.body.userId,
+        //     val: req.body.val
+        // }
         // console.log("score: " + score.val);
         // console.log("user: " + score.userId);
     });
@@ -38,13 +38,22 @@ module.exports = function(app) {
     });
 
     app.post("/signup", function (req, res) {
-        // alert(req.body.userId);
-        var user = {
-            userId: req.body.userId,
-            score: req.body.score
-        }
-        console.log("User: hello " + user.userId);
-        console.log("Score: " + user.score);
+        //console.log("checking if req works " + req.body.usrName);
+        var userConsole = req.body;
+        // var userConsole = {
+        //     usrName: req.body.usrName,
+        //     email: req.body.email,
+        //     userId: req.body.userId,
+        //     password: req.body.password,
+        //     score: req.body.score
+        // }
+        var user = new User (userConsole);
+        // user.save(function(err) {
+        //     if (err) throw err;
+
+        //     console.log('User ' + user.usrName + ' saved successfully!');
+        // });
+        console.log("json " + JSON.stringify(user));
         
     });
 
