@@ -1,3 +1,9 @@
+function backToLogin () {
+ 		console.log("in the login function");
+ 		location = 'login.html';
+ 		return false;
+ 	}
+ 	
 $(document).ready(function() {
 // window.onload = function() {
  
@@ -13,6 +19,7 @@ $(document).ready(function() {
 	// $('#account-form-btn2').onclick = function () {
  //        location.href = "http://localhost:8080/game";
  //    };
+
 	
 
 		$('#account-form').submit(function() {

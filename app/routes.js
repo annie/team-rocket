@@ -39,7 +39,7 @@ module.exports = function(app) {
 
     app.post("/signup", function (req, res) {
         //console.log("checking if req works " + req.body.usrName);
-        var userConsole = req.body;
+        // var userConsole = req.body;
         // var userConsole = {
         //     usrName: req.body.usrName,
         //     email: req.body.email,
@@ -47,7 +47,14 @@ module.exports = function(app) {
         //     password: req.body.password,
         //     score: req.body.score
         // }
-        var user = new User (userConsole);
+        var user = new User ({ 
+            usrName: req.body.usrName,
+            email: req.body.email,
+            userId: req.body.userId,
+            password: req.body.password,
+            score: req.body.score
+        });
+        user.save();
         // user.save(function(err) {
         //     if (err) throw err;
 

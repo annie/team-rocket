@@ -39,7 +39,7 @@
     <!-- store the userId on the client side in a hidden input field //-->
     <input type="hidden" id="userId">
     <div id="account-form-container" class="center-vertical">
-      <form method="post" id="account-form" class="form-horizontal well">
+      <form method="post" id="account-form" class="form-horizontal well" onSubmit="return backToLogin();" >
         <h2></h2>
         <h6 id="sub1">Please tell us a little about yourself.</h6>
         <hr>
@@ -73,7 +73,7 @@
         <hr>
         <div class="form-buttons">
           <button type="button" id="account-form-btn1" class="btn btn-default"></button>
-          <button type="submit" id="account-form-btn2" class="btn btn-primary"><a href="/game"></a></button>
+          <button type="submit" id="account-form-btn2" class="btn btn-primary"></button>
         </div>
         <div class="clearfix"></div>
       </form>
