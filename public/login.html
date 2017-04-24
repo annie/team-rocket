@@ -1,132 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Node.js Login</title>
+    <title>Columbia Game</title>
     <link rel="stylesheet" href="/vendor/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
   </head>
   <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <div class="navbar-brand">Node Login</div>
-        </div>
-        <ul class="nav navbar-nav navbar-right">
-          <li>
-            <div class="navbar-btn"><a href="https://github.com/braitsch/node-login#readme" class="btn btn-default">Documentation</a></div>
-          </li>
-          <li>
-            <div class="navbar-btn"><a href="https://github.com/braitsch/node-login" class="btn btn-default">Source</a></div>
-          </li>
-          <li>
-            <div id="btn-donate" class="navbar-btn btn btn-default">Donate</div>
-          </li>
-          <li>
-            <div class="navbar-btn"><a href="http://braitsch.io" class="btn btn-default">&copy; braitsch</a></div>
-          </li>
-          <li>
-            <div id="btn-logout" class="navbar-btn btn btn-primary hide">Sign Out</div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div id="login" class="center-vertical">
-      <form id="form-login" method="post" class="well">
-        <h2>Hello!</h2>
-        <h6>Please Login To Your Account</h6>
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" id="user-tf" name="user" class="form-control">
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="pass-tf" name="pass" class="form-control">
-        </div>
-        <div class="controls">
-          <button type="button" class="btn btn-default button-rememember-me"><span class="glyphicon glyphicon-unchecked button-rememember-me-glyph"></span>Remember Me</button>
-          <button type="submit" class="btn btn-primary button-sign-in"><span class="glyphicon glyphicon-lock"></span>Sign In</button>
-        </div>
-        <div class="clearfix"></div>
-        <hr>
-        <div class="btm-links">
-          <div id="forgot-password"><a href="#">Forgot Your Password?</a></div>
-          <div id="create-account"><a href="/signup">Create An Account</a></div>
-        </div>
-        <div class="clearfix"></div>
-      </form>
-    </div>
-    <div class="modal-alert modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <!--button.close(data-dismiss='modal') x-->
-            <h4></h4>
-          </div>
-          <div class="modal-body">
-            <p></p>
-          </div>
-          <div class="modal-footer">
-            <button data-dismiss="modal" id="ok" class="btn btn-primary">OK</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="get-credentials" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button data-dismiss="modal" class="close">x</button>
-            <h4>Retrieve Password</h4>
-          </div>
-          <div class="modal-body">
-            <form method="post" id="get-credentials-form" class="well">
-              <div class="form-group">
-                <label>Please enter the email address associated with your account</label>
-                <input type="text" id="email-tf" name="email" class="form-control required">
-                <div class="alert alert-danger hide"></div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button data-dismiss="modal" id="cancel" class="btn btn-default">Cancel</button>
-            <button type="submit" id="retrieve-password-submit" class="btn btn-primary">Submit</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal modal-donate fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button>
-            <h4 class="modal-title">Donate</h4>
-          </div>
-          <div class="modal-body">Thanks for using <b>Node Login!</b><br><br>If this project is helping you out you can make a small donation here to say thanks.<br><br>Your donation is greatly appreciated and helps support <a href='https://github.com/braitsch' target='_blank'>all of my open source projects</a>.<br><br>
-            <label class="radio-inline">
-              <input type="radio" name="donationRadios" value="100">$1
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="donationRadios" value="500" checked="checked">$5
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="donationRadios" value="1000">$10
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="donationRadios" value="2500">$25
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="donationRadios" value="5000">$50
-            </label>
-            <div class="thanks">Thanks!</div>
-            <div class="clearfix"></div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-default">Cancel</button>
-            <button type="button" class="btn btn-primary btn-donate">Donate</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
+  <div class="login-page">
+  <div class="form">
+    <form method="get" class="login-form">
+      <input type="text" id="user-tf" name="user" placeholder="username"/>
+      <input type="password" id="pass-tf" name="pass" placeholder="password"/>
+      <button>login</button>
+      <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+    </form>
+  </div>
+  </div>
+
+    
+   
+   
+    
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script src="/vendor/jquery-2.2.3.min.js"></script>
     <script src="/vendor/jquery.form.min.js"></script>

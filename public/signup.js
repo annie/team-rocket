@@ -3,6 +3,10 @@ function backToLogin () {
  		location = 'login.html';
  		return false;
  	}
+
+ // $('.message a').click(function(){
+	// 	   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+	// 	});
  	
 $(document).ready(function() {
 // window.onload = function() {
@@ -20,9 +24,9 @@ $(document).ready(function() {
  //        location.href = "http://localhost:8080/game";
  //    };
 
-	
+		
 
-		$('#account-form').submit(function() {
+		$('#acount-form').submit(function() {
 			var user = {
 				usrName: document.getElementById("name-tf").value,
 				email: document.getElementById("email-tf").value,
@@ -36,10 +40,9 @@ $(document).ready(function() {
 		    req.send(JSON.stringify(user));
 
 
-
-
-
+		    $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
 			alert(JSON.stringify(user));
+
 	    
 
 	});	
