@@ -8,6 +8,13 @@ var renderer = PIXI.autoDetectRenderer(
 	resolution: 2
 	}
 );
+
+
+		
+		
+var guiContainer, theme;
+
+
 // renderer.backgroundColor = 0x62A8E5;
 document.body.appendChild(renderer.view);
 
@@ -19,6 +26,10 @@ function loadProgressHandler(loader, resource) {
 }
 
 
+var resources = [
+	'assets/img/gamelogo.png'
+
+];
 // //////////////////////////////////////////////////
 // aaaaaahhhhhhh note:
 // convert image to texture
@@ -26,6 +37,7 @@ PIXI.loader
     .add("img/kirby-hd.png")
     .add("img/platform.png")
     .add("img/coin.png")
+	.add(resources)
     .on("progress", loadProgressHandler)
     .load(setup);
 
@@ -49,26 +61,27 @@ function generate_entities()
 	kirby.vy = 0;
 	player_entity = new Player(new Rect(64, 0, 
 		actual_kirby_size_x*kirby_scale, 
-		actual_kirby_size_y*kirby_scale), kirby, 'player');
+		actual_kirby_size_y*kirby_scale), kirby, 'player', 'img/kirby-hd.png');
 
 	var platform_sprite = new PIXI.Sprite( PIXI.loader.resources["img/platform.png"].texture);
 	platform_sprite.scale.set(40, 2);
 	platform_sprite.vx = platform_sprite.vy = 0;
-	var platform = new Platform(new Rect(0, 700, 2000, 100), platform_sprite, 'plat');
+	var platform = new Platform(new Rect(0, 700, 2000, 100), platform_sprite, 'plat', 'img/platform.png');
 
 	var platform_sprite2 = new PIXI.Sprite( PIXI.loader.resources["img/platform.png"].texture);
 	platform_sprite2.scale.set(40, 2);
 	platform_sprite2.vx = platform_sprite.vy = 0;
-	var platform2 = new Platform(new Rect(400, 300, 2000, 100), platform_sprite2, 'plat');
+	var platform2 = new Platform(new Rect(400, 300, 2000, 100), platform_sprite2, 'plat', 'img/platform.png');
 
 	var coin = new PIXI.Sprite( PIXI.loader.resources["img/coin.png"].texture);
 	coin.scale.set(1, 1);
-	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin');
+	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin', 'img/coin.png');
 
 
 	// add entities to scene
 	// pass scene the window's width and height, basically our viewport dims
-	scene = new Scene(window.innerWidth, window.innerHeight, player_entity, player_entity);
+	scene = new Scene(window.innerWidth, window.innerHeight, player_entity, player_entity, 
+		renderer);
 	scene.add_entity(player_entity);
 	scene.add_entity(platform);
 	scene.add_entity(platform2);
@@ -119,21 +132,26 @@ function setup() {
 		}
 	}
 
+    requestAnimationFrame(gameLoop);
+	
+	EZGUI.Theme.load(['assets/kenney-theme/kenney-theme.json'], function () {
+		guiContainer = EZGUI.create(editorGUI, 'kenney');
+		scene.setGUI(guiContainer);
+		create_gui_listeners(guiContainer);
+	}.bind(this));
+			
 	// set game state
 	state = play;
-	gameLoop();
+	function gameLoop() {
+		// this function is called 60 times / second by default
+		requestAnimationFrame(gameLoop);
+		state();
+		scene.render_all(renderer);	
+	}
+
 }
 
 // continually updates the game
-function gameLoop() {
-    // this function is called 60 times / second by default
-    requestAnimationFrame(gameLoop);
-
-    state();
-
-    scene.render_all(renderer);	
-}
-
 // handles gameplay
 function play() {
     scene.update_all();
@@ -141,7 +159,7 @@ function play() {
     if (player_entity.collision_box.y > 1000) {
         var score = {
             userId: "Annie",
-            highScore: player_entity.collision_box.x
+            val: player_entity.collision_box.x
         }
         var req = new XMLHttpRequest();
         req.open("POST", "http://localhost:8080/", true);
@@ -172,7 +190,7 @@ function keyboard(keyCode) {
             }
             key.isDown = true;
         }
-        event.preventDefault();
+        //event.preventDefault();
     }
 
     function upHandler(event) {
@@ -182,7 +200,7 @@ function keyboard(keyCode) {
             }
             key.isDown = false;
         }
-        event.preventDefault();
+        //event.preventDefault();
     }
 
     // attach event listeners

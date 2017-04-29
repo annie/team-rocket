@@ -18,13 +18,14 @@ class Rect
 
 class Entity
 {
-	constructor(rect, sprite, id) {
+	constructor(rect, sprite, id, image_path) {
 		this.collision_box = rect;
 		this.sprite = sprite;
 		this.id = id;
 		this.vx = 0.0;
 		this.vy = 0.0;
 		this.is_flipped = false;
+		this.image_path = image_path;
 
 		// state flags
 		this.is_passable = false;
@@ -34,6 +35,10 @@ class Entity
 
 		// fixed entities are not moved by forces
 		this.is_fixed = false;
+	}
+
+	collides(other_entity) {
+		return this.collision_box.collides( other_entity.collision_box );
 	}
 
 	update(dt, scene) {
@@ -57,8 +62,6 @@ class Entity
 			var horizontal_collides = scene.does_rect_collide(horizontal_rect, this);
 
 			// if we would collide with a fixed object, kill the velocity in that direction
-			// if we would collide with a non-fixed object, then it's only an event
-			// then do not move (TODO !!)
 			if (vertical_collides) {
 				this.vy = 0.0; // kill the velocity
 				this.last_tick_immobilized_y = true;
@@ -95,8 +98,8 @@ class Entity
 
 class Player extends Entity
 {
-	constructor(rect, sprite, id) {
-		super(rect, sprite, id);
+	constructor(rect, sprite, id, image_path) {
+		super(rect, sprite, id, image_path);
 		this.can_jump = true;
 		this.move_amount = 200;
 	}
@@ -119,8 +122,9 @@ class Player extends Entity
 	right_press() { this.vx = this.move_amount; }
 	right_release() { this.vx = 0; }
 	up_press() { 
-		// If we have hit the ground recently, then
-		if (this.can_jump) 
+		// If we have hit the ground recently, then we can jump
+		// also we have to not be midair
+		if (this.can_jump && this.vy == 0) 
 		{
 			this.vy = -this.move_amount*5; 
 			this.can_jump = false;
@@ -134,8 +138,8 @@ class Player extends Entity
 
 class Item extends Entity
 {
-	constructor(rect, sprite, id) {
-		super(rect, sprite, id);
+	constructor(rect, sprite, id, image_path) {
+		super(rect, sprite, id, image_path);
 		this.is_fixed = true;
 		this.is_passable = true;
 	}
@@ -145,7 +149,7 @@ class Item extends Entity
 		super.update(dt, scene);
 
 		// Are we colliding with the player at any point?
-		if (this.collision_box.collides(scene.player.collision_box)) {
+		if (this.collides(scene.player)) {
 
 			// How much is this item worth?
 			scene.add_score(40);
@@ -160,8 +164,8 @@ class Item extends Entity
 
 class Platform extends Entity
 {
-	constructor(rect, sprite, id) {
-		super(rect, sprite, id);
+	constructor(rect, sprite, id, image_path) {
+		super(rect, sprite, id, image_path);
 		this.is_fixed = true;
 	}
 	update(dt, scene) {
