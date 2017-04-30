@@ -41,7 +41,7 @@ $(document).ready(function() {
 
 
 		    $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
-			alert(JSON.stringify(user));
+			// alert(JSON.stringify(user));
 
 	    
 

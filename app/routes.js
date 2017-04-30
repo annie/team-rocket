@@ -1,21 +1,23 @@
 var path = require("path");
-
-var User = require("./models/User");
+var express = require('express');
+var passport = require('passport');
+// var User = require("./app/models/User.js");
 
 module.exports = function(app) {
 
-    app.get("/", function (req, res) {
+    app.get('/', function (req, res) {
+        console.log("in the login post!");
+        res.sendFile(path.join(__dirname, "../public", "login.html"));
+    });
+
+    app.get("/login", function (req, res) {
+
         res.sendFile(path.join(__dirname, "../public", "login.html"));
         // console.log("hello");
     });
 
-    app.post("/", function (req, res) {
-        // var score = {
-        //     userId: req.body.userId,
-        //     val: req.body.val
-        // }
-        // console.log("score: " + score.val);
-        // console.log("user: " + score.userId);
+    app.post("/login", passport.authenticate('local'), function (req, res) {
+        res.redirect('/game');
     });
 
     app.get("/game", function (req, res) {
@@ -33,11 +35,21 @@ module.exports = function(app) {
     });
 
     app.get("/signup", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public", "signup.html"));
+        res.sendFile(path.join(__dirname, "../public", "signup.ht   ml"));
         
     });
 
     app.post("/signup", function (req, res) {
+        User.register(new User({ username : req.body.usrName }), req.body.password, function(err, account) {
+        if (err) {
+            return res.render('register', { account : account });
+        }
+
+        passport.authenticate('local')(req, res, function () {
+            res.session.save();
+            res.redirect('/login');
+        });
+    });
         //console.log("checking if req works " + req.body.usrName);
         // var userConsole = req.body;
         // var userConsole = {
@@ -47,13 +59,13 @@ module.exports = function(app) {
         //     password: req.body.password,
         //     score: req.body.score
         // }
-        var user = new User ({ 
-            usrName: req.body.usrName,
-            email: req.body.email,
-            userId: req.body.userId,
-            password: req.body.password,
-            score: req.body.score
-        });
+        // var user = new User ({ 
+        //     usrName: req.body.usrName,
+        //     email: req.body.email,
+        //     userId: req.body.userId,
+        //     password: req.body.password,
+        //     score: req.body.score
+        // });
         user.save();
         // user.save(function(err) {
         //     if (err) throw err;
