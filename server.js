@@ -1,7 +1,6 @@
 // setup
 var express = require("express");
 var app = express();
-var flash = require('connect-flash');
 var mongoose = require("mongoose");
 var passport = require("passport");
 var LocalStrategy = require('passport-local').Strategy;
@@ -31,7 +30,6 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 
 // passport config

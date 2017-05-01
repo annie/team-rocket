@@ -9,9 +9,6 @@ var renderer = PIXI.autoDetectRenderer(
 	}
 );
 
-
-		
-		
 var editor;
 
 
