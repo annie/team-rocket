@@ -1,6 +1,7 @@
 // setup
 var express = require("express");
 var app = express();
+var flash = require('connect-flash');
 var mongoose = require("mongoose");
 var passport = require("passport");
 var LocalStrategy = require('passport-local').Strategy;
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 
 // passport config
@@ -49,10 +51,8 @@ app.use(passport.session());
 
 
 passport.use(new LocalStrategy(
-
 	function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-    	console.log("inside local strategy");
+    User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
@@ -60,13 +60,19 @@ passport.use(new LocalStrategy(
       if (!user.validPassword(password)) {
         return done(null, false, { message: 'Incorrect password.' });
       }
-
       return done(null, user);
     });
   }
 	));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
 
 
 // create db

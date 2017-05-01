@@ -6,7 +6,6 @@ var passport = require('passport');
 module.exports = function(app) {
 
     app.get('/', function (req, res) {
-        console.log("in the login post!");
         res.sendFile(path.join(__dirname, "../public", "login.html"));
     });
 
@@ -16,9 +15,16 @@ module.exports = function(app) {
         // console.log("hello");
     });
 
-    app.post("/login", passport.authenticate('local'), function (req, res) {
-        res.redirect('/game');
-    });
+    app.post('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/game' }
+                                   
+                        ));
+
+    // app.post("/login", passport.authenticate('local'), function (req, res) {
+    //     console.log("in the login post!");
+    //     res.redirect('/game');
+    // });
 
     app.get("/game", function (req, res) {
         res.sendFile(path.join(__dirname, "../public", "smth.html"));
@@ -35,7 +41,7 @@ module.exports = function(app) {
     });
 
     app.get("/signup", function (req, res) {
-        res.sendFile(path.join(__dirname, "../public", "signup.ht   ml"));
+        res.sendFile(path.join(__dirname, "../public", "signup.html"));
         
     });
 

@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-      
-
     <title>Columbia Game</title>
     <link rel="stylesheet" href="/vendor/bootstrap.min.css">
     <link rel="stylesheet" href="/css/login.css">
@@ -14,7 +12,7 @@
 
     <div class="login-page">
   <div class="form">
-    <form method="post" id="acount-form" class="register-form" onSubmit="return backToLogin();">
+  <form method="post" id="account-form" class="signin-form" onSubmit="return backToLogin();">
       <input id="name-tf" type="text" name="name" value="Pratishta Yerakala" placeholder="name"/>
       <input id="user-tf" type="text" name="user" value="prattography" placeholder="username"/>
       <input id="pass-tf" type="password" name="pass" value="teamrocket" placeholder="password"/>
@@ -22,6 +20,7 @@
       <button type="submit" id="create-account">create</button>
       <p class="message">Already registered? <a href="/login">Sign In</a></p>
     </form>
+
   </div>
   </div>
     
@@ -68,6 +67,15 @@
         <div class="clearfix"></div>
       </form>
     </div> -->
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script src="/vendor/jquery-2.2.3.min.js"></script>
+    <script src="/vendor/jquery.form.min.js"></script>
+    <script src="/vendor/bootstrap.min.js"></script>
+    <script src="/js/views/stripe.js"></script>
+    <script src="/js/views/login.js"></script>
+    <script src="/js/controllers/loginController.js"></script>
+    <script src="/js/form-validators/loginValidator.js"></script>
+    <script src="/js/form-validators/emailValidator.js"></script>
 
   
   </body>
