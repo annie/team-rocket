@@ -41,14 +41,16 @@ module.exports = function(app) {
     });
 
     app.get("/signup", function (req, res) {
+        console.log("in signup function post");
         res.sendFile(path.join(__dirname, "../public", "signup.html"));
         
     });
 
     app.post("/signup", function (req, res) {
-        User.register(new User({ username : req.body.usrName }), req.body.password, function(err, account) {
+        console.log("in signup function post");
+        User.register(new User({ username : req.body.usrName }), req.body.password, function(err, user) {
         if (err) {
-            return res.render('register', { account : account });
+            return res.render('register', { user : user });
         }
 
         passport.authenticate('local')(req, res, function () {
