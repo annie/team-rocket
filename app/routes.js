@@ -1,7 +1,7 @@
 var path = require("path");
 var express = require('express');
 var passport = require('passport');
-// var User = require("./app/models/User.js");
+var User = require("./models/User.js");
 
 module.exports = function(app) {
 

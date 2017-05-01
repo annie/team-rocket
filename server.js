@@ -13,18 +13,18 @@ var PORT = process.env.PORT || 8080;
 
 
 
-var Schema = mongoose.Schema;
-var passportLocalMongoose = require('passport-local-mongoose');
+// var Schema = mongoose.Schema;
+// var passportLocalMongoose = require('passport-local-mongoose');
 
-var userSchema = new Schema({
-	username: String,
-  	password: String
-  });
+// var userSchema = new Schema({
+// 	username: String,
+//   	password: String
+//   });
 
-userSchema.plugin(passportLocalMongoose);	
+// userSchema.plugin(passportLocalMongoose);	
 
-var User = mongoose.model('User', userSchema);
-module.exports = User;
+// var User = mongoose.model('User', userSchema);
+// module.exports = User;
 
 // config
 app.use(bodyParser.json());
@@ -48,6 +48,8 @@ app.use(flash());
 //     });
 //   }
 //   ));
+
+var User = require('./app/models/User.js');
 
 
 passport.use(new LocalStrategy(
