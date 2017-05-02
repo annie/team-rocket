@@ -1,7 +1,4 @@
 
-
-// aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
 // identify the type based on the flag
 function serialize_individual_entity(entity) {
 	var temp_fab = {
@@ -12,7 +9,7 @@ function serialize_individual_entity(entity) {
 		id: entity.id,
 		image_path: entity.image_path,
 
-		// add is_fixed, is_passable!
+		// is_fixed, is_passable for future iterations
 
 		// sprite peculiarities:
 		sprite_scale_x: entity.sprite.scale.x,
@@ -35,7 +32,7 @@ function serialize_individual_entity(entity) {
 }
 
 
-// Serializer too, I gotta rename this file LOL it's not just reconstructing
+// Serializer too
 function serialize(entity_list)
 {
 	var objects = [];
@@ -54,7 +51,6 @@ function serialize(entity_list)
 
 
 }
-
 
 // ///////////////////////////////////////////////////////////////////////////////////
 
@@ -93,7 +89,7 @@ function deserialize_individual_entity(record) {
 
 
 
-// Serializer too, I gotta rename this file LOL it's not just reconstructing
+// Serializer too
 function deserialize(json_string)
 {
 	var objects = JSON.parse(json_string);
