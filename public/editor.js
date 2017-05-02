@@ -111,6 +111,15 @@ class Editor
 	}
 
 
+	// Generate from the thingy
+
+
+
+
+
+
+
+
 	// one version for checking path for a new resouce, from the  
 	// TODO avoid code reduplciation, refactor
 	create_object_check_path() 
@@ -143,11 +152,20 @@ class Editor
 		}
 	}
 
-	entity_change_duplicate_function() {
+	entity_change_duplicate() {
 		// probably want a visual indicator after setting the flag
 
 		// flag flag flag
 		this.anticipating_duplication = true;
+	}
+
+	// delete the current entity
+	entity_change_delete() {
+		// ezpz, if you mark it as dead, class Scene will do the work for you
+		this.currently_selected_entity.is_alive = false;
+
+		// might want to move us off this tab, since the entity is gone
+		EZGUI.components.all_tabs.activate(0);
 	}
 
 
@@ -162,9 +180,14 @@ class Editor
 
 		EZGUI.components.entity_change_properties_button.on('click', function() {this.change_properties();}.bind(this));
 		EZGUI.components.entity_change_check_path.on('click', function() {this.entity_change_check_path();}.bind(this));
-		EZGUI.components.entity_duplicate_button.on('click', function() {this.entity_change_duplicate_function();}.bind(this));
+		EZGUI.components.entity_duplicate_button.on('click', function() {this.entity_change_duplicate();}.bind(this));
+		EZGUI.components.entity_delete_button.on('click', function() {this.entity_change_delete();}.bind(this));
+
 	}
 
+
+
+		
 
 
 	// //////////////////////////////////////////////////////////

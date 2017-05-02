@@ -41,7 +41,7 @@ var createGUI = {
 		label_input_pair("height", "height_value", {x:225,y:180}, 100),
 		label_input_pair("id", "id_value", {x:0,y:255}, 150),
 		,{ id: 'create_button', text: 'MAKE', component: 'Button', width: 400, height: 50,
-			position: {x:25, y:600} }
+			position: {x:25, y:650} }
 	]
 
 }
@@ -63,9 +63,11 @@ var tab_selected_entity = {
 		label_input_pair("id", "entity_change_id_value", {x:0,y:255}, 150),
 
 		{ id: 'entity_duplicate_button', text: 'DUPLICATE', component: 'Button', width: 400, height: 50,
-			position: {x:25, y:450} },
+			position: {x:25, y:500} },
+		{ id: 'entity_delete_button', text: 'DELETE', component: 'Button', width: 400, height: 50,
+			position: {x:25, y:575} },
 		{ id: 'entity_change_properties_button', text: 'EDIT', component: 'Button', width: 400, height: 50,
-			position: {x:25, y:600} }
+			position: {x:25, y:650} }
 
 
 	]

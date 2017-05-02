@@ -4,7 +4,7 @@ var TYPE_ENUM = {
 	UNDETERMINED: -1,
 	PLATFORM: 0,
 	ITEM: 1,
-	PLAYER: 2
+	PLAYER: 2,
 };
 
 
@@ -171,4 +171,5 @@ class Platform extends Entity
 	}
 
 }
+
 
