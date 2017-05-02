@@ -293,7 +293,6 @@ class Editor
         EZGUI.components.back_button.on('click', function () {
             window.location.replace("http://localhost:8080/maps");
         });
-	}
 
 		EZGUI.components.entity_duplicate_button.on('click', function() {this.entity_change_duplicate();}.bind(this));
 		EZGUI.components.entity_delete_button.on('click', function() {this.entity_change_delete();}.bind(this));
@@ -336,7 +335,7 @@ class Editor
 
 		EZGUI.components.entity_change_sprite_path_value.text = chosen_entity.image_path;
 
-		EZGUI.components.all_tabs.activate(2);
+		EZGUI.components.all_tabs.activate(1);
 	}
 
 

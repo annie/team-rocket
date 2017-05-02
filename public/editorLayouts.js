@@ -155,7 +155,7 @@ function generate_createGUI(current_type) {
 
 	// finally add the submit button
 	var submit_button = { id: 'create_button', text: 'MAKE', component: 'Button',
-			width: 400, height: 50, position: {x:25, y:650} };
+			width: 400, height: 50, position: {x:25, y:450} };
 	incomplete_fab.children.push(submit_button);
 	return incomplete_fab;
 
