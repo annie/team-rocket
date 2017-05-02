@@ -29,12 +29,11 @@ $(document).ready(function() {
 		
 
 		$('#acount-form').submit(function() {
+			console.log("hit the submit form and function");
 			var user = {
-				usrName: document.getElementById("name-tf").value,
-				email: document.getElementById("email-tf").value,
-	            userId: document.getElementById("user-tf").value,
+				
+	            username: document.getElementById("user-tf").value,
 	            password: document.getElementById("pass-tf").value,
-	            score: 0
         	}
 	        var req = new XMLHttpRequest();
 		    req.open("POST", "//localhost:8080/signup", true);

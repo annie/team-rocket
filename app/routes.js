@@ -33,11 +33,18 @@ module.exports = function(app) {
         // console.log("hello");
     });
 
-    app.post('/login',
+  //   app.post('/login',
+  // passport.authenticate('local', function(req, res){
+  //   console.log("passport user", req);}
+                                   
+  //                       ));
+
+     app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
                                    failureRedirect: '/game' }
                                    
                         ));
+
 
     // app.post("/login", passport.authenticate('local'), function (req, res) {
     //     console.log("in the login post!");
@@ -59,13 +66,14 @@ module.exports = function(app) {
     });
 
     app.get("/signup", function (req, res) {
-        console.log("in signup function post");
+        console.log("in signup function get");
         res.sendFile(path.join(__dirname, "../public", "signup.html"));
         
     });
 
-    app.post("/signup", function (req, res) {
-        console.log("in signup function post");
+     app.post("/signup", function (req, res) {
+        //res.redirect('/login');
+        console.log("in signup function post " + req.body.userId);
         User.register(new User({ username : req.body.usrName }), req.body.password, function(err, user) {
         if (err) {
             return res.render('register', { user : user });
@@ -74,8 +82,9 @@ module.exports = function(app) {
         passport.authenticate('local')(req, res, function () {
             res.session.save();
             res.redirect('/login');
-        });
-    });
+        // });
+    }
+    );
         //console.log("checking if req works " + req.body.usrName);
         // var userConsole = req.body;
         // var userConsole = {
@@ -92,15 +101,58 @@ module.exports = function(app) {
         //     password: req.body.password,
         //     score: req.body.score
         // });
-        user.save();
-        // user.save(function(err) {
-        //     if (err) throw err;
+    //     user.save();
+    //     // user.save(function(err) {
+    //     //     if (err) throw err;
 
-        //     console.log('User ' + user.usrName + ' saved successfully!');
-        // });
-        console.log("json " + JSON.stringify(user));
+    //     //     console.log('User ' + user.usrName + ' saved successfully!');
+    //     // });
+    //     console.log("json " + JSON.stringify(user));
+    // });
         
-    });
+
+    // app.post("/signup", passport.authenticate('local-signup', {
+    //     successRedirect : '/game', // redirect to the secure profile section
+    //     failureRedirect : '/login', // redirect back to the signup page if there is an error
+    // }));
+
+    // //     function (req, res) {
+    // //     console.log("in signup function post");
+    // //     User.register(new User({ username : req.body.usrName }), req.body.password, function(err, user) {
+    // //     if (err) {
+    // //         return res.render('register', { user : user });
+    // //     }
+
+    // //     passport.authenticate('local')(req, res, function () {
+    // //         res.session.save();
+    // //         res.redirect('/login');
+    // //     });
+    // // });
+    //     //console.log("checking if req works " + req.body.usrName);
+    //     // var userConsole = req.body;
+    //     // var userConsole = {
+    //     //     usrName: req.body.usrName,
+    //     //     email: req.body.email,
+    //     //     userId: req.body.userId,
+    //     //     password: req.body.password,
+    //     //     score: req.body.score
+    //     // }
+    //     // var user = new User ({ 
+    //     //     usrName: req.body.usrName,
+    //     //     email: req.body.email,
+    //     //     userId: req.body.userId,
+    //     //     password: req.body.password,
+    //     //     score: req.body.score
+    //     // });
+    //     // user.save();
+    //     // user.save(function(err) {
+    //     //     if (err) throw err;
+
+    //     //     console.log('User ' + user.usrName + ' saved successfully!');
+    //     // });
+    //     // console.log("json " + JSON.stringify(user));
+        
+    // // });
 
     app.listen(3000, function() {
         console.log("listening on port 3000");

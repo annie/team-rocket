@@ -49,7 +49,6 @@ app.use(passport.session());
 
 var User = require('./app/models/User.js');
 
-
 passport.use(new LocalStrategy(
 	function(username, password, done) {
     User.findOne({ username: username }, function (err, user) {
@@ -64,6 +63,48 @@ passport.use(new LocalStrategy(
     });
   }
 	));
+
+
+// passport.use('local-signup', new LocalStrategy(
+// // {
+// // 	usernameField: 'username',
+// // 	passwordField: 'password',
+// // 	passReqToCallback: true
+// // }
+// // function(username, password, done) {
+// // 	process.nextTick(function () { 
+// // 		User.findOne({'username' : username}, function(err, user) {
+// // 			if (err)
+// // 				return done(err);
+// // 			if (user) {
+// // 				return done(err);
+// // 			} else {
+// // 				var newUser = new User();
+
+// // 				newUser.username = username;
+// // 				newUser.password = newUser.generateHash(password);
+// // 			}
+
+// // 		})
+// // 	})
+// // }
+// 	function(username, password, done) {
+// 	console.log("in the local strategy func");
+//     User.findOne({ username: username }, function (err, user) {
+//       if (err) { return done(err); }
+//       if (!user) {
+//         return done(null, false, { message: 'Incorrect username.' });
+//       }
+//       if (!user.validPassword(password)) {
+//         return done(null, false, { message: 'Incorrect password.' });
+//       }
+//       return done(null, user);
+//     });
+//   }
+// 	));
+
+
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -84,7 +125,7 @@ db.once("open", function () {
 
 // routes
 require("./app/routes.js")(app);
-// require('./node-modules/passport')(passport);
+// require('./node_modules/passport')(passport);
 
 
 // start app
