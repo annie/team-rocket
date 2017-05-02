@@ -33,7 +33,6 @@ function label_input_pair(label_name, input_id, pair_position,
 var entity_options = [
 		TYPE_ENUM.PLATFORM,
 		TYPE_ENUM.ITEM,
-		TYPE_ENUM.ENEMY
 ];
 
 var entity_type_definitions = [];
@@ -51,25 +50,6 @@ entity_type_definitions[TYPE_ENUM.ITEM] = {
 			},
 	]
 };
-entity_type_definitions[TYPE_ENUM.ENEMY] = {
-	name: "Enemy",
-	parameters: [
-			{
-				label: "enemy_hp",
-				type: "int"
-			},
-			{
-				label: "enemy_attack_radius",
-				type: "float"
-			}, 
-			{ 
-				label: "enemy_name",
-				type: "string"
-			}	
-	]
-};
-
-
 
 function generate_radio_buttons() {
 	var tab_parent = {
