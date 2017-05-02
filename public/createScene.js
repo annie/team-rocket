@@ -28,7 +28,7 @@ var resources = [
 
 ];
 // //////////////////////////////////////////////////
-// aaaaaahhhhhhh note:
+// note:
 // convert image to texture
 PIXI.loader
     .add("img/kirby-hd.png")

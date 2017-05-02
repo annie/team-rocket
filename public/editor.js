@@ -1,16 +1,12 @@
 // editor data
 
 
-// Information necessary to serialize shit
+// Information necessary to serialize:
 /*
-	the main issue is that sprites don't have the actual path of the image
-	inside them, so they need to have that path baked into them as well
-
 	- image path
 	- image scales
 	- width/height
 	- entity type: determines what other things might be necessary
-
  */
 
 class Editor
@@ -81,7 +77,6 @@ class Editor
 		}
 
 		// find the proportions necessary to scale the sprite to the given widht/height
-		// TODO this code is used thrice, put it somewhere TODO TODO TODO
 		sprite.scale.set(scale_x, scale_y);
 
 
@@ -113,15 +108,7 @@ class Editor
 
 	// Generate from the thingy
 
-
-
-
-
-
-
-
-	// one version for checking path for a new resouce, from the  
-	// TODO avoid code reduplciation, refactor
+	// one version for checking path for a new resouce
 	create_object_check_path() 
 	{
 		// See if you can produce a sprite
@@ -129,7 +116,7 @@ class Editor
 		var resource = PIXI.loader.resources[path];
 
 		if (typeof(resource) !== "undefined") {
-			// get the height?
+			// get the height
 			var tex_width = resource.texture.width;
 			var tex_height = resource.texture.height;
 			EZGUI.components.width_value.text = tex_width;
@@ -153,9 +140,6 @@ class Editor
 	}
 
 	entity_change_duplicate() {
-		// probably want a visual indicator after setting the flag
-
-		// flag flag flag
 		this.anticipating_duplication = true;
 	}
 
@@ -164,13 +148,10 @@ class Editor
 		// ezpz, if you mark it as dead, class Scene will do the work for you
 		this.currently_selected_entity.is_alive = false;
 
-		// might want to move us off this tab, since the entity is gone
 		EZGUI.components.all_tabs.activate(0);
 	}
 
 
-	// //////////////////////////////////////////////////////////////////////////////////////////
-	// //////////////////////////////////////////////////////////////////////////////////////////
 	create_gui_listeners(guiContainer)
 	{
 		// Here we assign all the different listeners of the GUI components
@@ -184,13 +165,6 @@ class Editor
 		EZGUI.components.entity_delete_button.on('click', function() {this.entity_change_delete();}.bind(this));
 
 	}
-
-
-
-		
-
-
-	// //////////////////////////////////////////////////////////
 
 	// Make a copy now of the chosen entity, at a different location
 	duplicate_at_position(scene, mouse_x, mouse_y) {
@@ -228,7 +202,6 @@ class Editor
 
 		EZGUI.components.entity_change_sprite_path_value.text = chosen_entity.image_path;
 
-		// okay
 		EZGUI.components.all_tabs.activate(2);
 	}
 
