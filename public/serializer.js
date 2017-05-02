@@ -48,7 +48,11 @@ function serialize(entity_list)
 				objects.push(serialized);
 		}
 	}
-	console.log(JSON.stringify(objects));
+ //    console.log("serialize !!!!!!");
+	// console.log(JSON.stringify(objects));
+ //    var stringified_objects = JSON.stringify(objects);
+ //    return stringified_objects;
+    return JSON.stringify(objects);
 	// for each of those, write the appropriate information into JSON
 
 

@@ -71,6 +71,49 @@ var tab_selected_entity = {
 	]
 }
 
+var save_button = {
+    //this ID must be unique, it'll help you easily access the gui component throught EZGUI.components.myButton
+    id: 'save_button',
+    //Button label
+    text: 'Save',
+    //this the component ID, EZGUI define those components: Window, Button, Checkbox, Slider, Radio...
+    //but you can create your own components or extend existing
+    component: 'Button',  
+    skin: 'bluebutton',                 
+    //This is the padding space from the component borders
+    padding: 4,
+    //component position relative to parent
+    position: { x: 50, y: 150 },
+    width: 175,
+    height: 50
+};
+
+var back_button = {
+    //this ID must be unique, it'll help you easily access the gui component throught EZGUI.components.myButton
+    id: 'back_button',
+    //Button label
+    text: 'Back to Maps',
+    //this the component ID, EZGUI define those components: Window, Button, Checkbox, Slider, Radio...
+    //but you can create your own components or extend existing
+    component: 'Button',                  
+    //This is the padding space from the component borders
+    padding: 4,
+    //component position relative to parent
+    position: { x: 250, y: 150 },
+    width: 175,
+    height: 50
+};
+
+var save_tab = {
+    id: 'save_tab',
+    title: 'Save',
+    children: [
+        label_input_pair("Name", "saved_map_name", {x:0,y:50}, 200),
+        save_button, 
+        back_button
+    ]
+}
+
 var editor_tabs = 
 {
 	id: 'all_tabs',
@@ -84,9 +127,12 @@ var editor_tabs =
 	children: [
 			createGUI,
 			{ title: 'Sprites' },
-			tab_selected_entity
+			tab_selected_entity,
+            save_tab
 	]
 };
+
+
 
 var editorGUI = {
 	id: 'mainScreen',

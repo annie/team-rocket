@@ -163,6 +163,23 @@ class Editor
 		EZGUI.components.entity_change_properties_button.on('click', function() {this.change_properties();}.bind(this));
 		EZGUI.components.entity_change_check_path.on('click', function() {this.entity_change_check_path();}.bind(this));
 		EZGUI.components.entity_duplicate_button.on('click', function() {this.entity_change_duplicate_function();}.bind(this));
+
+        EZGUI.components.save_button.on('click', function () {
+            var save_req = new XMLHttpRequest();
+            save_req.open("POST", "http://localhost:8080/save", true);
+            save_req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            var new_save_map = {
+                new_user: "Annie",
+                new_map_name: EZGUI.components.saved_map_name.text,
+                new_serialized_map: scene.serialize()
+            }
+            console.log("new_save_map")
+            console.log(new_save_map)
+            save_req.send(JSON.stringify(new_save_map));
+        });
+        EZGUI.components.back_button.on('click', function () {
+            window.location.replace("http://localhost:8080/maps");
+        });
 	}
 
 
