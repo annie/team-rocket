@@ -169,7 +169,7 @@ class Scene
 	}
 
 	serialize() {
-		serialize(this.entities);
+		return serialize(this.entities);
 	}
 
 	load(scene_json) {

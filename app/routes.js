@@ -1,7 +1,8 @@
 var path = require("path");
 var express = require('express');
 var passport = require('passport');
-var User = require("./models/User.js");
+var Map = require("../app/models/Map.js");
+var User = require("../app/models/User.js")
 
 module.exports = function(app) {
 
@@ -41,7 +42,7 @@ module.exports = function(app) {
 
      app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/game' }
+                                   failureRedirect: '/maps' }
                                    
                         ));
 
@@ -75,16 +76,16 @@ module.exports = function(app) {
         //res.redirect('/login');
         console.log("in signup function post " + req.body.userId);
         User.register(new User({ username : req.body.usrName }), req.body.password, function(err, user) {
-        if (err) {
-            return res.render('register', { user : user });
-        }
 
-        passport.authenticate('local')(req, res, function () {
-            res.session.save();
-            res.redirect('/login');
-        // });
-    }
-    );
+            if (err) {
+                return res.render('register', { user : user });
+            }
+
+            passport.authenticate('local')(req, res, function () {
+                res.session.save();
+                res.redirect('/login');
+            });
+        });
         //console.log("checking if req works " + req.body.usrName);
         // var userConsole = req.body;
         // var userConsole = {
@@ -153,6 +154,66 @@ module.exports = function(app) {
     //     // console.log("json " + JSON.stringify(user));
         
     // // });
+
+    app.post("/save", function (req, res) {
+        console.log("saving map!!");
+        console.log(req.body.new_map_name);
+        console.log(req.body.new_serialized_map);
+
+        // var map = JSON.parse(req.body.serialized_map);
+        var newMap = new Map({
+            mapId: req.body.new_map_name,
+            userId: req.body.new_user,
+            entities: req.body.new_serialized_map
+        });
+        newMap.save(function (err, doc, rows) {
+            if (err) {
+                console.log("error code: " + err.code);
+                console.log("error saving newMap");
+            }
+        });
+    });
+
+    app.get("/maps", function (req, res) {
+        res.sendFile(path.join(__dirname, "../public", "maps.html"));
+    })
+
+    app.get("/:mapId", function (req, res) {
+        // console.log(req.params);
+        // console.log()
+        res.sendFile(path.join(__dirname, "../public", "game_map.html"));
+    });
+
+    app.get("/maps/loadAllMaps", function (req, res) {
+        Map.find({}, function (err, docs) {
+            if (err) {
+                console.log("load all maps error");
+            }
+            else {
+                res.send(JSON.stringify(docs));
+            }
+        });
+    });
+
+    app.get("/load/:mapIdToGet", function (req, res) {
+        console.log("sending a map to load!");
+        Map.findOne({mapId: req.params["mapIdToGet"]}, function (err, doc) {
+            if (err) {
+                console.log("find error");
+            }
+            else {
+                console.log(doc);
+                res.contentType('json');
+                if (req.params["mapIdToGet"] == "game") {
+                    res.send(JSON.stringify([]));
+                }
+                else {
+                    res.send(doc.entities);
+                }
+            }
+        });
+
+    });
 
     app.listen(3000, function() {
         console.log("listening on port 3000");

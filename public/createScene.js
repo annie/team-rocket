@@ -18,8 +18,8 @@ document.body.appendChild(renderer.view);
 // set up stage
 
 function loadProgressHandler(loader, resource) {
-    console.log("loading: " + resource.url);
-    console.log("progress: " + loader.progress + "%");
+    // console.log("loading: " + resource.url);
+    // console.log("progress: " + loader.progress + "%");
 }
 
 
@@ -27,6 +27,7 @@ var resources = [
 	'assets/img/gamelogo.png'
 
 ];
+
 // //////////////////////////////////////////////////
 // note:
 // convert image to texture
@@ -43,6 +44,21 @@ var scene;
 var state, kirby, env;
 var player_entity;
 
+function load_map() {
+    var map_req = new XMLHttpRequest();
+    map_req.onload = function () {
+        if (map_req.readyState = XMLHttpRequest.DONE) {
+            // console.log("received xhr response!!!: " + map_req.response);
+            scene.load(map_req.response);
+            // console.log(map_req.response);
+        }
+    }
+    var curr_url = window.location.href.split("/");
+    var map_to_get = curr_url[curr_url.length-1];
+    console.log("map_to_get: " + "http://localhost:8080/load/" + map_to_get);
+    map_req.open("GET", "http://localhost:8080/load/" + map_to_get, true);
+    map_req.send();
+}
 
 function generate_entities()
 {
@@ -72,7 +88,7 @@ function generate_entities()
 
 	var coin = new PIXI.Sprite( PIXI.loader.resources["img/coin.png"].texture);
 	coin.scale.set(1, 1);
-	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin', 'img/coin.png');
+	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin', 'img/coin.png', 1337);
 
 
 	// add entities to scene
@@ -80,9 +96,17 @@ function generate_entities()
 	scene = new Scene(window.innerWidth, window.innerHeight, player_entity, player_entity, 
 		renderer);
 	scene.add_entity(player_entity);
-	scene.add_entity(platform);
-	scene.add_entity(platform2);
-	scene.add_entity(coin_entity);
+    var curr_url = window.location.href.split("/");
+    var map_to_get = curr_url[curr_url.length-1];
+    if (map_to_get == "game") {
+        scene.add_entity(platform);
+        scene.add_entity(platform2);
+        scene.add_entity(coin_entity);
+    }
+    else {
+        load_map();
+    }
+
 
 	//env = new PIXI.Container();
 	//env.addChild(kirby);
@@ -133,6 +157,8 @@ function setup() {
 	editor.editor_ready_up();
 	scene.setGUI(editor);
 
+    
+
 	requestAnimationFrame(gameLoop);
 	
 				
@@ -152,16 +178,16 @@ function setup() {
 function play() {
     scene.update_all();
 
-    if (player_entity.collision_box.y > 1000) {
-        var score = {
-            userId: "Annie",
-            val: player_entity.collision_box.x
-        }
-        var req = new XMLHttpRequest();
-        req.open("POST", "http://localhost:8080/", true);
-        req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        req.send(JSON.stringify(score));
-    }
+    // if (player_entity.collision_box.y > 1000) {
+    //     var score = {
+    //         userId: "Annie",
+    //         val: player_entity.collision_box.x
+    //     }
+    //     var req = new XMLHttpRequest();
+    //     req.open("POST", "http://localhost:8080/", true);
+    //     req.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    //     req.send(JSON.stringify(score));
+    // }
 }
 
 function gravity() {

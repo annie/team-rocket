@@ -24,6 +24,7 @@ function serialize_individual_entity(entity) {
 			case TYPE_ENUM.UNDETERMINED:
 			case TYPE_ENUM.PLATFORM:
 			case TYPE_ENUM.ITEM: 
+				temp_fab.value = entity.value;
 					break;
 	}
 
@@ -45,7 +46,11 @@ function serialize(entity_list)
 				objects.push(serialized);
 		}
 	}
-	console.log(JSON.stringify(objects));
+ //    console.log("serialize !!!!!!");
+	// console.log(JSON.stringify(objects));
+ //    var stringified_objects = JSON.stringify(objects);
+ //    return stringified_objects;
+    return JSON.stringify(objects);
 	// for each of those, write the appropriate information into JSON
 
 
@@ -76,7 +81,9 @@ function deserialize_individual_entity(record) {
 			case TYPE_ENUM.PLATFORM:
 				entity = new Platform(collision_box, sprite, id, path); break;
 			case TYPE_ENUM.ITEM: 
-				entity = new Item(collision_box, sprite, id, path); break;
+				// here, we need to extract more info
+				var value = record.value;
+				entity = new Item(collision_box, sprite, id, path, value); break;
 	}	
 
 	return entity;
