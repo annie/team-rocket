@@ -15,8 +15,6 @@ class Scene
 		this.player = player;
 		this.renderer = renderer;
 
-		console.log(this.stage.width);
-		console.log(this.stage.height);
 		this.stage.interactive = true;
 		this.stage.buttonMode = true;
 		this.stage.hitArea = new PIXI.Rectangle(0, 0, this.stage.width, this.stage.height);
@@ -33,11 +31,9 @@ class Scene
 			var map_y = mouse_y + y_offset; 
 
 			// What can we do with this...
-			console.log(map_x + " " + map_y);
 			this.process_mouse_click(map_x, map_y);
 
 		}.bind(this);
-
 
 		this.stage.on('mousedown', response);
 
@@ -49,42 +45,14 @@ class Scene
 	
 	process_mouse_click(mousex, mousey)
 	{
-		if (typeof(this.gui) != "undefined") {
-
-			// this depends on the GUI flag (TODO TODO refactor this)
-			if (anticipating_duplication ) {
-				duplicate_at_position(this, mousex, mousey);
-			} else {
-					// relay this information to the gui			
-					var click = new Rect(mousex, mousey, 1, 1);
-
-					// TODO
-					// for now, find the entity chosen
-					var the_entity = undefined;
-					var entity_found = false;
-
-					for (var i = 0; i < this.entities.length; ++i) {
-						var entity = this.entities[i];
-						if (entity.collision_box.collides(click)) {
-							the_entity = entity
-							entity_found = true;
-							break;
-						}
-					}
-
-					// if the entity is found, then relay that to the GUI
-					if (entity_found) {
-						gui_clicked_entity(the_entity);
-					}
-			}
-
+		if (typeof(this.editor) != "undefined") {
+			this.editor.process_click(this, mousex, mousey);
 		}
-
 	}
 
-	setGUI(gui_container)
+	setGUI(editor)
 	{
-		this.gui = guiContainer;
+		this.editor = editor;
 	}
 
 	add_entity(new_entity)
@@ -104,8 +72,21 @@ class Scene
 			}
 		}
 		return collides;
+	}
 
+	get_collided(rect) {
+		var the_entity = undefined;
+		var entity_found = false;
 
+		for (var i = 0; i < this.entities.length; ++i) {
+			var entity = this.entities[i];
+			if (entity.collision_box.collides(rect)) {
+				the_entity = entity;
+				entity_found = true;
+				break;
+			}
+		}
+		return the_entity;
 	}
 
 	render_all() {
@@ -149,8 +130,9 @@ class Scene
 		}
 		
 		
-		if (this.gui)
-			this.stage.addChild(this.gui);
+		if (this.editor && this.editor.ready)
+			this.stage.addChild(this.editor.guiContainer);
+
 		this.renderer.render(this.stage);
 	}
 
@@ -159,7 +141,6 @@ class Scene
 		this.stage.hitArea = new PIXI.Rectangle(0, 0, this.stage.width, this.stage.height);
 		var seconds = 1.000/60;
 
-		// TODO TODO!!! pls refactor make these into a Force class 
 		// gravity - all non-fixed entities, go.
 		for (var i = 0; i < this.entities.length; ++i) {
 			var entity = this.entities[i];
@@ -185,6 +166,17 @@ class Scene
 
 	add_score(score_addition) {
 		this.player_score += score_addition;
+	}
+
+	serialize() {
+		serialize(this.entities);
+	}
+
+	load(scene_json) {
+		this.entities = deserialize(scene_json);
+
+		// add the player entity back in, player_entity
+		this.add_entity(player_entity);
 	}
 
 }

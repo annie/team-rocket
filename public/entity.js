@@ -1,19 +1,11 @@
-class Rect
-{   
-	constructor(x, y, width, height) {     
-		this.x = x;
-		this.y = y;
-		this.width = width;   
-		this.height = height;     
-	} 
 
-	collides(other_rect) {     
-		return this.x < other_rect.x + other_rect.width &&
-			this.x + this.width > other_rect.x &&
-			this.y < other_rect.y + other_rect.height &&
-			this.height + this.y > other_rect.y;
-	}	
-}
+
+var TYPE_ENUM = {
+	UNDETERMINED: -1,
+	PLATFORM: 0,
+	ITEM: 1,
+	PLAYER: 2
+};
 
 
 class Entity
@@ -26,6 +18,7 @@ class Entity
 		this.vy = 0.0;
 		this.is_flipped = false;
 		this.image_path = image_path;
+		this.type = TYPE_ENUM.UNDETERMINED;
 
 		// state flags
 		this.is_passable = false;
@@ -102,8 +95,9 @@ class Player extends Entity
 		super(rect, sprite, id, image_path);
 		this.can_jump = true;
 		this.move_amount = 200;
+		this.type = TYPE_ENUM.PLAYER;
 	}
-
+	
 	update(dt, scene) {
 		// moves based off the velocity
 		super.update(dt, scene);
@@ -142,6 +136,7 @@ class Item extends Entity
 		super(rect, sprite, id, image_path);
 		this.is_fixed = true;
 		this.is_passable = true;
+		this.type = TYPE_ENUM.ITEM;
 	}
 
 	update(dt, scene) {
@@ -167,6 +162,7 @@ class Platform extends Entity
 	constructor(rect, sprite, id, image_path) {
 		super(rect, sprite, id, image_path);
 		this.is_fixed = true;
+		this.type = TYPE_ENUM.PLATFORM;
 	}
 	update(dt, scene) {
 		// moves based off the velocity

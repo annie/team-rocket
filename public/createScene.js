@@ -12,7 +12,7 @@ var renderer = PIXI.autoDetectRenderer(
 
 		
 		
-var guiContainer, theme;
+var editor;
 
 
 // renderer.backgroundColor = 0x62A8E5;
@@ -132,14 +132,13 @@ function setup() {
 		}
 	}
 
-    requestAnimationFrame(gameLoop);
+	editor = new Editor(scene); 
+	editor.editor_ready_up();
+	scene.setGUI(editor);
+
+	requestAnimationFrame(gameLoop);
 	
-	EZGUI.Theme.load(['assets/kenney-theme/kenney-theme.json'], function () {
-		guiContainer = EZGUI.create(editorGUI, 'kenney');
-		scene.setGUI(guiContainer);
-		create_gui_listeners(guiContainer);
-	}.bind(this));
-			
+				
 	// set game state
 	state = play;
 	function gameLoop() {
