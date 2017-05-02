@@ -86,7 +86,7 @@ module.exports = function(app) {
                 res.redirect('/login');
             });
         });
-        //console.log("checking if req works " + req.body.usrName);
+            //console.log("checking if req works " + req.body.usrName);
         // var userConsole = req.body;
         // var userConsole = {
         //     usrName: req.body.usrName,
@@ -153,7 +153,7 @@ module.exports = function(app) {
     //     // });
     //     // console.log("json " + JSON.stringify(user));
         
-    // // });
+    });
 
     app.post("/save", function (req, res) {
         console.log("saving map!!");
