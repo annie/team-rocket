@@ -1,6 +1,6 @@
 
 
-// things with basically no dependencies lol
+// things with basically no dependencies
 
 class Rect
 {   

@@ -4,7 +4,8 @@ var TYPE_ENUM = {
 	UNDETERMINED: -1,
 	PLATFORM: 0,
 	ITEM: 1,
-	PLAYER: 2
+	PLAYER: 2,
+	ENEMY: 3
 };
 
 
@@ -132,11 +133,12 @@ class Player extends Entity
 
 class Item extends Entity
 {
-	constructor(rect, sprite, id, image_path) {
+	constructor(rect, sprite, id, image_path, value) {
 		super(rect, sprite, id, image_path);
 		this.is_fixed = true;
 		this.is_passable = true;
 		this.type = TYPE_ENUM.ITEM;
+		this.value = value;
 	}
 
 	update(dt, scene) {
@@ -151,6 +153,8 @@ class Item extends Entity
 
 			// Remove this item
 			this.is_alive = false;
+
+			console.log("Item was worth " + this.value);
 		}
 	}
 }
@@ -171,4 +175,5 @@ class Platform extends Entity
 	}
 
 }
+
 

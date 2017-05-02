@@ -2,7 +2,7 @@ var path = require("path");
 var express = require('express');
 var passport = require('passport');
 var Map = require("../app/models/Map.js");
-// var User = require("./app/models/User.js");
+var User = require("../app/models/User.js")
 
 module.exports = function(app) {
 
