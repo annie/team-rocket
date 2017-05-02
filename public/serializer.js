@@ -27,6 +27,7 @@ function serialize_individual_entity(entity) {
 			case TYPE_ENUM.UNDETERMINED:
 			case TYPE_ENUM.PLATFORM:
 			case TYPE_ENUM.ITEM: 
+				temp_fab.value = entity.value;
 					break;
 	}
 
@@ -80,7 +81,9 @@ function deserialize_individual_entity(record) {
 			case TYPE_ENUM.PLATFORM:
 				entity = new Platform(collision_box, sprite, id, path); break;
 			case TYPE_ENUM.ITEM: 
-				entity = new Item(collision_box, sprite, id, path); break;
+				// here, we need to extract more info
+				var value = record.value;
+				entity = new Item(collision_box, sprite, id, path, value); break;
 	}	
 
 	return entity;

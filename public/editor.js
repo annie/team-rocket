@@ -20,14 +20,16 @@ class Editor
 		this.anticipating_duplication = false;
 		this.scene = scene;
 		this.ready = false;
+
+		this.type_selection = true;
+		this.selected_type = TYPE_ENUM.UNDETERMINED;
 	}
+
 
 	editor_ready_up() {
 		EZGUI.Theme.load(['assets/kenney-theme/kenney-theme.json'], function () {
-				this.guiContainer = EZGUI.create(editorGUI, 'kenney');
-				this.create_gui_listeners(this.guiContainer);
-				this.ready = true;
-			}.bind(this));
+						this.back_to_type_select();
+						}.bind(this));
 	}
 
 	process_click(scene, mousex, mousey) {
@@ -92,22 +94,126 @@ class Editor
 	// button handlers
 	// //////////////////////////////////////////////////////////////////////////////////////////
 
+
+	select_entity_type_submit() {
+
+			// get, from the radio selection, the thing selected
+			var selected_radio = EZGUI.radioGroups['myradio'].selected;	
+			console.log(selected_radio.text);
+
+
+			// search the definitions for the right index
+			var selected_type_found = false;
+			for (var i = 0; i < entity_options.length; ++i)
+			{
+				var given_entity_option = entity_options[i];
+				var entity_def = entity_type_definitions[given_entity_option];
+				if (entity_def.name == selected_radio.text) 
+				{
+					selected_type_found = given_entity_option;
+					break;
+				}
+			}
+			console.log(selected_type_found);
+			this.selected_type = selected_type_found;
+
+			var first_tab = generate_createGUI(this.selected_type);
+			var tabs = generate_tabs(first_tab);
+			var editorGUI = {
+					id: 'mainScreen',
+					component: 'Window',
+
+					width: 500,
+					height: 800,
+					draggable: false,
+
+					children: [ tabs ],
+					//logo can be an frame name
+					logo: 'assets/img/gamelogo.png'
+				};
+
+			this.guiContainer = EZGUI.create(editorGUI, 'kenney');
+			this.type_selection = false;
+			this.create_gui_listeners(this.guiContainer);
+			EZGUI.components.all_tabs.activate(0);
+
+	}
+
+	back_to_type_select() {
+			// take the tab view
+			var first_tab = generate_radio_buttons();
+
+			// what you want for the first tab defaults to the selection menu
+			var tabs = generate_tabs(first_tab);
+
+			var editorGUI = {
+					id: 'mainScreen',
+					component: 'Window',
+
+					width: 500,
+					height: 800,
+					draggable: false,
+
+					children: [ tabs ],
+					//logo can be an frame name
+					logo: 'assets/img/gamelogo.png'
+			};
+
+			this.type_selection = true;
+			this.guiContainer = EZGUI.create(editorGUI, 'kenney');
+			this.create_gui_listeners(this.guiContainer);
+			this.ready = true;
+			EZGUI.components.all_tabs.activate(0);
+
+
+
+
+	}
+
 	create_object_submit() 
 	{
+		var record = {};
 		// Now, grab the thing
 		var x = parseInt(EZGUI.components.x_value.text);
 		var y = parseInt(EZGUI.components.y_value.text);
 		var new_id = EZGUI.components.id_value.text;
 		var path = EZGUI.components.sprite_path_value.text;
+		var width = PIXI.loader.resources[path].texture.width;
+		var height = PIXI.loader.resources[path].texture.height;
 
-		var platform_sprite = new PIXI.Sprite( PIXI.loader.resources[path].texture);
-		platform_sprite.scale.set(1, 1);
-		platform_sprite.vx = platform_sprite.vy = 0;
+		record.type = this.selected_type;
+		record.x = x;
+		record.y = y;
+		record.width = width;
+		record.height = height;
+		record.image_path = path;
+		record.id = new_id;
+		record.sprite_scale_x = 1;
+		record.sprite_scale_y = 1;
 
-		// TODO not just Platforms!
-		var platform = new Platform(new Rect(x, y, 100, 100), platform_sprite, new_id);
+		// add the properties from all the extra things?
+		//this.selected_type, remember
 
-		scene.add_entity(platform);
+		// Get the definition struct
+		var helpful_struct = entity_type_definitions[this.selected_type];
+		for (var i = 0; i < helpful_struct.parameters.length; ++i)
+		{
+				// for each of the parameters..
+				var current_param = helpful_struct.parameters[i];
+				var label = current_param.label;
+				var entry = EZGUI.components['autogen_' + label].text;
+				console.log("entry: " + entry);
+			
+				// Add this to the thingy
+				switch (current_param.type) {
+					case "int": record[label] = parseInt(entry); break;
+					case "string": record[label] = entry; break;
+					case "float": record[label] = parseFloat(entry); break;
+				}
+		}
+
+		var instantiation = deserialize_individual_entity(record);
+		scene.add_entity(instantiation);
 	}
 
 
@@ -175,9 +281,18 @@ class Editor
 	{
 		// Here we assign all the different listeners of the GUI components
 
-		EZGUI.components.create_button.on('click', function() {this.create_object_submit();}.bind(this));
-		EZGUI.components.check_path.on('click', function() {this.create_object_check_path();}.bind(this));
+		// we are in the mode where we must select the type
+		if ( this.type_selection) {
+			EZGUI.components.select_entity_type.on('click', function() {this.select_entity_type_submit();}.bind(this));
 
+		} else {
+			// must be the actual creation
+			EZGUI.components.create_button.on('click', function() {this.create_object_submit();}.bind(this));
+			EZGUI.components.check_path.on('click', function() {this.create_object_check_path();}.bind(this));
+			EZGUI.components.create_back_button.on('click', function() {this.back_to_type_select();}.bind(this));
+		}
+
+		// This exists in every tab, just reassign it if need be
 		EZGUI.components.entity_change_properties_button.on('click', function() {this.change_properties();}.bind(this));
 		EZGUI.components.entity_change_check_path.on('click', function() {this.entity_change_check_path();}.bind(this));
 		EZGUI.components.entity_duplicate_button.on('click', function() {this.entity_change_duplicate();}.bind(this));

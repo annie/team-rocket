@@ -72,7 +72,7 @@ function generate_entities()
 
 	var coin = new PIXI.Sprite( PIXI.loader.resources["img/coin.png"].texture);
 	coin.scale.set(1, 1);
-	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin', 'img/coin.png');
+	var coin_entity = new Item(new Rect(0, 600, 50, 50), coin, 'coin', 'img/coin.png', 1337);
 
 
 	// add entities to scene
